@@ -5,9 +5,7 @@
 //  Created by 김동혁 on 2022/07/06.
 //
 
-import UIKit
 import SnapKit
-import Toast
 import WebKit
 
 class NewsWebViewController: UIViewController {

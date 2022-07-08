@@ -1,5 +1,5 @@
 //
-//  NewsListViewController.swift
+//  KeywordNewsViewController.swift
 //  KeywordNews
 //
 //  Created by 김동혁 on 2022/07/04.
@@ -9,8 +9,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-
-class NewsListViewController: UIViewController {
+class KeywordNewsViewController: UIViewController {
 
     let disposeBag = DisposeBag()
     
@@ -20,7 +19,6 @@ class NewsListViewController: UIViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
-        bind()
         attribute()
         layout()
     }
@@ -29,45 +27,9 @@ class NewsListViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func bind() {
-        let newsResult = searchBar.shouldLoadResult
-            .flatMapLatest {
-                NewsNetwork().searchNews(query: $0)
-            }
-            .share()
-        
-        let newsValue = newsResult
-            .map { data -> News? in
-                guard case .success(let value) = data else { return nil }
-                
-                return value
-            }
-            .filter { $0 != nil }
-        
-        let newsError = newsResult
-            .map { data -> String? in
-                guard case .failure(let error) = data else { return nil }
-                
-                return error.message
-            }
-            .filter { $0 != nil }
-        
-        let cellData = newsValue
-            .map { news -> [NewsListCellData] in
-                guard let news = news else { return [] }
-                
-                return news.items
-                    .map {
-                        return NewsListCellData(
-                            title: $0.title,
-                            link: $0.link,
-                            description: $0.description,
-                            pubDate: $0.pubDate
-                        )
-                    }
-            }
-            .bind(to: listView.cellData)
-            .disposed(by: disposeBag)
+    func bind(_ viewModel: KeywordNewsViewModel) {
+        listView.bind(viewModel.newsListViewModel)
+        searchBar.bind(viewModel.searchBarViewModel)
         
         listView.rx.modelSelected(NewsListCellData.self)
             .observe(on: MainScheduler.instance)

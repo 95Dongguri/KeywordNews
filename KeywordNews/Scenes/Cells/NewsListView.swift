@@ -11,13 +11,10 @@ import RxCocoa
 class NewsListView: UITableView {
     
     let disposeBag = DisposeBag()
-    
-    let cellData = PublishSubject<[NewsListCellData]>()
-    
+        
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: frame, style: style)
         
-        bind()
         attribute()
     }
     
@@ -25,8 +22,8 @@ class NewsListView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func bind() {
-        cellData
+    func bind(_ viewModel: NewsListViewModel) {
+        viewModel.cellData
             .asDriver(onErrorJustReturn: [])
             .drive(self.rx.items) { tv, row, data in
                 let index = IndexPath(row: row, section: 0)
