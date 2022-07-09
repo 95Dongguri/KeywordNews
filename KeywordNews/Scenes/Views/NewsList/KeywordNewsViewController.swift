@@ -33,10 +33,7 @@ class KeywordNewsViewController: UIViewController {
         
         listView.rx.modelSelected(NewsListCellData.self)
             .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] data in
-                let vc = NewsWebViewController(cellData: data)
-                self?.navigationController?.pushViewController(vc, animated: true)
-            })
+            .subscribe(onNext: showNewsWeb)
             .disposed(by: disposeBag)
     }
     
@@ -57,5 +54,12 @@ class KeywordNewsViewController: UIViewController {
             $0.top.equalTo(searchBar.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+    }
+}
+
+private extension KeywordNewsViewController {
+    func showNewsWeb(_ data: NewsListCellData) {
+        let vc = NewsWebViewController(cellData: data)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

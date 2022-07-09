@@ -34,8 +34,6 @@ class NewsListView: UITableView {
                 return cell
             }
             .disposed(by: disposeBag)
-        
-        
     }
     
     private func attribute() {
