@@ -38,7 +38,7 @@ class KeywordNewsViewController: UIViewController {
     }
     
     private func attribute() {
-        title = "Keyworkd News"
+        title = "Keyword News"
         view.backgroundColor = .white
     }
     
